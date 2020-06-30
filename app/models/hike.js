@@ -11,7 +11,8 @@ const hikeSchema = new mongoose.Schema({
   },
   distance: {
     type: Number,
-    required: true
+    required: true,
+    min: 0
   },
   difficulty: {
     type: String,
