@@ -1,203 +1,44 @@
-[![General Assembly Logo](https://camo.githubusercontent.com/1a91b05b8f4d44b5bbfb83abac2b0996d8e26c92/687474703a2f2f692e696d6775722e636f6d2f6b6538555354712e706e67)](https://generalassemb.ly/education/web-development-immersive)
+# Take A Hike! - Express API
 
-# express-api-template
+This is the API-side directory for the hike-tracking application. This application allows a user to create a new account and sign in to view and record their hikes. Hike information to be recorded and stored includes the park name and location, a distance and a difficulty rating. The user is able to record this information, and then view, edit and delete their previously recorded hikes. Users are able to change their password and sign out using the navigation bar.
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+The server-side application uses an express template and stores the user's information securely using mongoDB and mongoose. Authentication is required to view, create or update any of the user's information. Each user is currently only able to access their own information and are not able to view or otherwise interact with other user's logged hikes.
 
-## Installation
+## Important Links
 
-1. [Download](../../archive/master.zip) this template.
-1. Move the .zip file to your `sei/projects/` directory and Unzip it (creating a
-   folder) -- **NOTE:** if the folder was already unzipped, use the `mv` command
-   line to move it to the `sei/projects/` directory.
-1. Rename the directory from express-api-template -> your-app-name.
-1. Empty [`README.md`](README.md) and fill with your own content.
-1. Move into the new project and `git init`.
-1. Replace all instances of `'express-api-template'` with your app name.
-1. Install dependencies with `npm install`.
-1. Ensure that you have `nodemon` installed by running `npm install -g nodemon`.
-1. Ensure the API is functioning properly by running `npm run server`.
-1. Once everything is working, make an initial commit.
-1. Follow the steps in [express-api-deployment-guide](https://git.generalassemb.ly/ga-wdi-boston/express-api-deployment-guide)
+  * [GitHub API Repository](https://github.com/kbini28/hike-tracker-api)
+  * [Heroku Database] (https://still-refuge-65541.herokuapp.com)
+  * [GitHub Client Application Repository] (https://github.com/kbini28/hike-tracker-client)
+  * [Application](https://kbini28.github.io/hike-tracker-client/)
 
-## Structure
+## Planning Story
 
-Dependencies are stored in [`package.json`](package.json).
+I placed more emphasis with this application on preparation and planning. My plan, including wireframes, were more thought out, and my expectations for execution were more realistic (at least at the start). My plan was to develop the backend application first, then focus on frontend authentication. Once I was able to have a user sign up and in, I followed by adding a change password and sign out, including curl scripts to test each step along the way. I made sure to run both the front end server and back end api server to make sure authentication was successful.
 
-The most important file for understanding the structure of the template is
-`server.js`. This is where the actual Express `app` object is created, where
-the middlewares and routes are registered, and more. To register a routefile,
-follow the pattern established here with `exampleRoutes` and `userRoutes`. If
-you want to add any middlewares to your app, do that here.
+On the backend I was able to create a new Hike model based on the example provided. I created new CRUD routes for each hike action. I added a parameter that prevented users from seeing other user's posts. I would eventually like to include posts from other users, likely after I add comments/reviews. But until then users can only see their own content.
 
-The `app` directory contains models and route files. Models are simply Mongoose
-models. To create your own, follow the patterns established in
-`app/models/example.js`. Route files are somewhat similar to controllers in
-Rails, but they cover more functionality, including serialization and deciding
-which HTTP verbs to accept and what to do with them.
+### User Stories
 
-The `config` directory holds just `db.js`, which is where you specify the name
-and URL of your database.
+  * As a user, I want to be able to sign in securely.
+  * As a user, I want to view a list of all hikes I've recorded.
+  * As a user, I want to input my most recent hike, with at least a name and location.
+  * As a user, I want to rate my experience on that trail.
+  * As a user, I want to sign out from this application.
 
-The `lib` directory is for code that will be used in other places in the
-application. The token authentication code is stored in `lib/auth.js`. The
-other files in `lib` deal with error handling. `custom_errors.js` is where all
-the different custom classes of errors are created. If you need some other kind
-of error message, you can add it here. There are also some functions defined
-here that are used elsewhere to check for errors. `lib/error_handler.js` is a
-function that will be used in all your `.catch`es. It catches errors, and sets
-the response status code based on what type of error got thrown.
+My user stories could be broken down further into "input my most recent hike," "add a name and location," etc.
 
-You probably will only need to interact with files in `app/models`,
-`app/routes`, and `server.js`. You'll need to edit `db/config.js` just once,
-to change the name of your app.
+### Technologies Used
 
-## Tasks
+  * Express
+  * mongoDB
+  * Mongoose
+  * Javascript
 
-Instead of `grunt`, this template uses `npm` as a task runner. This is more
-conventional for modern Express apps, and it's handy because we'll definitely
-use `npm` anyway. These are the commands available:
+### Unsolved Problems
 
-| Command                | Effect                                                                                                      |
-|------------------------|-------------------------------------------------------------------------------------------------------------|
-| `npm run server`       | Starts a development server with `nodemon` that automatically refreshes when you change something.                                                                                         |
-| `npm test`             | Runs automated tests.                                                                                       |
-| `npm run debug-server` | Starts the server in debug mode, which will print lots of extra info about what's happening inside the app. |
+I would like to add subdocuments to the hikes, for adding comments/reviews. I would like to add more user information to the User model (or the ability to update that information after sign-up). I would eventually like to have users interacting with other users' posts (like adding comments) in a later version.
 
-## API
+### Wireframe
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
-
-Scripts are included in [`curl-scripts`](curl-scripts) to test built-in actions.
-Add your own scripts to test your custom API.
-
-### Authentication
-
-| Verb   | URI Pattern            | Controller#Action |
-|--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/` | `users#changepw`  |
-| DELETE | `/sign-out/`        | `users#signout`   |
-
-#### POST /sign-up
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:4741/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
-```
-
-```sh
-curl-scripts/sign-up.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
-  }
-}
-```
-
-#### POST /sign-in
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:4741/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
-```
-
-```sh
-curl-scripts/sign-in.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
-}
-```
-
-#### PATCH /change-password/
-
-Request:
-
-```sh
-curl --include --request PATCH http://localhost:4741/change-password/ \
-  --header "Authorization: Token token=$TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa curl-scripts/change-password.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-#### DELETE /sign-out/
-
-Request:
-
-```sh
-curl --include --request DELETE http://localhost:4741/sign-out/ \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa curl-scripts/sign-out.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-## [License](LICENSE)
-
-1. All content is licensed under a CC­BY­NC­SA 4.0 license.
-1. All software code is licensed under GNU GPLv3. For commercial use or
-    alternative licensing, please contact legal@ga.co.
+[Project ERD](https://i.imgur.com/YBIBhio.jpg)
+[Second ERD, after group discussion](https://i.imgur.com/1MfIHP8.jpg)
